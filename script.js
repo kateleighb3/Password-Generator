@@ -52,31 +52,14 @@ const numberArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const specialArray = ["!", "#","$", "%", "&", "*", "?", "@", "^"];
 
 // Variable declaration
-var confirmLength = "";
+let confirmLength = "";
 var confirmUpperCase;
 var confirmLowerCase;
 var confirmNumber;
 var confirmSpecialChar;
+let randomPW= [];
 
-
-// Prompt to confirm how many characters the user would like in their password
-function generatePassword() {
-  var confirmLength = (prompt("How many characters do you want your password to have?"));
-
-  //Loop if answer is outside the parameters
-  if (confirmLength < 8 || confirmLength > 128) {
-    alert ("Password length must be between 8 and 128 characters. Please enter a correct number.");
-    confirmLength = (prompt("How many characters do you want your password to have?"));
-  }
-
-  else {
-    confirmUpperCase = confirm("Click OK if you would like to include upper case characters.");
-    confirmLowerCase = confirm("Click OK if you would like to include lower case characters.");
-    confirmNumber = confirm("Would you like to inlcude numbers?");
-    confirmSpecialChar = confirm("Would you like to include special characters?");
-  }
-
-  //Loop if answer is outside the parameters
+function buildPassword() {
 
   if(confirmUpperCase === false && confirmLowerCase === false && confirmNumber === false && confirmSpecialChar ===false)
   {alert("Come on, dude. You gotta choose at least one parameter");
@@ -115,23 +98,50 @@ function generatePassword() {
 
  //Empty string to be filled based on for loop selecting random characters from the array
 
- var randomPW = ""
+ randomPW = []  // creating a new array from a bunch of arrays
+
+ console.log("randomPW: ", randomPW);
 
  for (var i = 0; i < confirmLength; i++) {
-  randomPW = randomPW + passwordChars[Math.floor(Math.random()* passwordChars.length)];
+  console.log("Loop Started");
+  randomPW.push(passwordChars[Math.floor(Math.random()* passwordChars.length)]);
+  console.log("loop finished");
   console.log(randomPW);
 }
 return randomPW;
 }
 
-  
+// Prompt to confirm how many characters the user would like in their password
+function userPrompts() {
+  confirmLength = (prompt("How many characters do you want your password to have?"));
+
+  //Loop if answer is outside the parameters
+  if (confirmLength < 8 || confirmLength > 128) {
+    alert ("Password length must be between 8 and 128 characters. Please enter a correct number.");
+    // confirmLength = (prompt("How many characters do you want your password to have?"));
+    userPrompts();
+  }
+
+  else {
+    confirmUpperCase = confirm("Click OK if you would like to include upper case characters.");
+    confirmLowerCase = confirm("Click OK if you would like to include lower case characters.");
+    confirmNumber = confirm("Would you like to inlcude numbers?");
+    confirmSpecialChar = confirm("Would you like to include special characters?");
+    buildPassword(); // function buildPassword has to be declared before function userPrompts because userPrompts 
+    // relies on function buildPassword so buildPassword function has to be declared first before being called on here.
+  }
+
+}
+
+  //Loop if answer is outside the parameters
+
 
 // Write password to the #password input
 function writePassword() {
-  var password = generatePassword();
+  var password = userPrompts();
   var passwordText = document.querySelector("#password");
 
-  passwordText.value = password;
+  passwordText.value = randomPW;
 
 }
 
